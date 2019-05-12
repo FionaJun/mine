@@ -1,1 +1,113 @@
+package clms1;
+
+public interface ComputableStrategy {
+
+	public abstract double computeScore(double []a);
+	}
+
+package clms1;
+
+public class GymnasticsGame {
+ComputableStrategy strategy;
+public void setStrategy(ComputableStrategy strategy) {
+	this.strategy=strategy;
+	
+}
+public double getPersonScore(double []a) {
+	if(strategy!=null)
+		return strategy.computeScore(a);
+	else
+		return 0;
+}
+}
+
+package clms1;
+
+public class StrategyOne implements ComputableStrategy {
+public double computeScore(double []a) {
+	double score=0,sum=0;
+	for(int i=0;i<a.length;i++) {
+		sum=sum+a[i];
+	}
+	score=sum/a.length;
+	return score;
+}
+}
+package clms1;
+
+public class StrategyTwo implements ComputableStrategy {
+public double computeScore(double []a) {
+	double score=0,multi=1;
+	int n=a.length;
+	for(int i=0;i<a.length;i++) {
+		multi=multi*a[i];
+	}
+	score=Math.pow(multi,1.0/n);
+	return score;
+}
+}
+package clms1;
+import java.util.Arrays;
+public class StrategyThree implements ComputableStrategy {
+public double computeScore(double []a) {
+	if(a.length<=2)
+		return 0;
+	double score=0,sum=0;
+	Arrays.sort(a);
+	for(int i=1;i<a.length-1;i++) {
+		sum=sum+a[i];
+	}
+	score=sum/(a.length-2);
+	return score;
+}
+}
+package clms1;
+
+public class Application {
+public static void main(String args[]) {
+	GymnasticsGame game=new GymnasticsGame();
+	game.setStrategy(new StrategyOne());
+	Person zhang=new Person();
+	zhang.setName("张三");
+	double []a= {9.12,9.25,8.87,9.99,6.99,7.88};
+	Person li=new Person();
+	li.setName("李四");
+	double[]b= {9.15,9.26,8.97,9.89,6.97,7.89};
+	zhang.setScore(game.getPersonScore(a));
+	li.setScore(game.getPersonScore(b));
+	System.out.println("使用算术平均值方案：");
+	System.out.printf("%s最后得分:%5.3f%n",zhang.getName(),zhang.getScore());
+	System.out.printf("%s最后得分:%5.3f%n",li.getName(),li.getScore());
+	game.setStrategy(new StrategyTwo());
+	zhang.setScore(game.getPersonScore(a));
+	li.setScore(game.getPersonScore(b));
+	System.out.println("使用几何平均值方案：");
+	System.out.printf("%s最后得分:%5.3f%n",zhang.getName(),zhang.getScore());
+	System.out.printf("%s最后得分:%5.3f%n",li.getName(),li.getScore());
+	game.setStrategy(new StrategyThree());
+	zhang.setScore(game.getPersonScore(a));
+	li.setScore(game.getPersonScore(b));
+	System.out.println("使用（去掉最高，最低）算术平均值方案：");
+	System.out.printf("%s最后得分:%5.3f%n",zhang.getName(),zhang.getScore());
+	System.out.printf("%s最后得分:%5.3f%n",li.getName(),li.getScore());
+    
+}
+}
+
+class Person{
+	String name;
+	double score;
+	public void setScore(double t) {
+		score=t;
+	}
+	public void setName(String s) {
+		name=s;
+	}
+	public double getScore() {
+		return score;
+	}
+	public String getName() {
+		return name;
+	}
+}
 
